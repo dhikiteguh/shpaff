@@ -1,0 +1,7 @@
+{
+  "name": "shopee-affiliate-html-generator",
+  "version": "1.4.1",
+  "private": true,
+  "type": "module",
+  "description": "Static Shopee affiliate HTML generator with Vercel image metadata extractor"
+}

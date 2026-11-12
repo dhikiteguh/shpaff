@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ee4d2d">
+  <title>Shopee Affiliate HTML Generator</title>
+  <style>
+    :root{--orange:#ee4d2d;--orange2:#ff653b;--ink:#171b24;--muted:#7d8490;--line:#e9ebef;--soft:#fff5f1;--green:#16a36a}
+    *{box-sizing:border-box}
+    body{margin:0;background:#f7f8fa;color:var(--ink);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    .app{max-width:1500px;margin:auto;padding:28px 30px 42px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:24px}
+    .brand{display:flex;align-items:center;gap:15px}
+    .brand-icon{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#ff7049,#ed3f24);color:white;display:grid;place-items:center;font-size:29px;font-weight:800;box-shadow:0 8px 22px #ee4d2d30}
+    h1{font-size:clamp(22px,3vw,32px);line-height:1.15;margin:0;font-weight:850;letter-spacing:-.8px}
+    h1 span{color:var(--orange)}
+    .subtitle{margin:6px 0 0;color:#626b78;font-size:15px}
+    .top-pill{padding:12px 18px;border-radius:30px;background:#fff;border:1px solid #ffe2d9;color:var(--orange);font-weight:750;white-space:nowrap;box-shadow:0 4px 16px #ee4d2d0c}
+    .layout{display:grid;grid-template-columns:minmax(330px,.82fr) minmax(500px,1.38fr);gap:18px;align-items:start}
+    .panel{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 5px 22px #18223008}
+    .left{padding:24px;position:relative}
+    .section-title{display:flex;align-items:center;gap:11px;font-size:18px;font-weight:800;margin:0 0 18px}
+    .number{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:#fff;font-size:14px;font-weight:800;flex:none}
+    .dropzone{border:2px dashed #d8dde5;border-radius:14px;padding:25px 18px;text-align:center;background:#fcfcfd;transition:.2s}
+    .dropzone.drag{border-color:var(--orange);background:var(--soft)}
+    .json-icon{font-size:42px;line-height:1;color:#3977c8;margin-bottom:9px}
+    .dropzone strong{display:block;font-size:15px}
+    .dropzone p{margin:6px 0 17px;color:var(--muted)}
+    .btn{border:0;border-radius:11px;padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.15s}
+    .btn-primary{background:linear-gradient(110deg,#ff762c,#f0442c);color:white;box-shadow:0 6px 15px #ee4d2d25}
+    .btn-primary:hover{filter:brightness(.97);transform:translateY(-1px)}
+    .btn-outline{background:#fff;border:1px solid #d9dde4;color:#333b48}
+    .btn-soft{background:#fff5f1;color:var(--orange);border:1px solid #ffd8cc}
+    .btn-block{width:100%}
+    .file-status{margin-top:12px;padding:11px 13px;border-radius:11px;background:#f2faf6;display:flex;align-items:center;gap:9px;color:#273c33}
+    .file-status .check{color:var(--green);font-size:18px}
+    .file-status small{color:var(--muted)}
+    .file-status button{margin-left:auto;border:0;background:transparent;color:#7b818b;font-size:18px}
+    .divider{height:1px;background:var(--line);margin:24px 0}
+    .image-manager{margin-top:14px;border:1px solid #f0e2dd;background:#fffaf8;border-radius:13px;padding:12px}
+    .image-manager-head{font-weight:800;font-size:13px;margin-bottom:4px}
+    .image-manager-help{font-size:11px;color:#858c97;line-height:1.45;margin-bottom:10px}
+    .image-item{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;padding:10px 0;border-top:1px solid #f1e8e4}
+    .image-thumb{width:48px;height:48px;border-radius:9px;background:#fff;border:1px solid #e7e9ed;display:grid;place-items:center;overflow:hidden;color:#a0a6af;font-size:10px;text-align:center}
+    .image-thumb img{width:100%;height:100%;object-fit:contain}
+    .image-fields{min-width:0}
+    .image-fields strong{display:block;font-size:11px;line-height:1.35;margin-bottom:5px;max-height:30px;overflow:hidden}
+    .image-fields input[type=url]{width:100%;border:1px solid #dce0e6;border-radius:8px;padding:7px 9px;font-size:11px;outline:none}
+    .image-tools{display:flex;gap:7px;align-items:center;margin-top:6px;flex-wrap:wrap}
+    .image-tools .btn{font-size:10px;padding:5px 8px;border-radius:7px}
+    .image-tools input[type=file]{display:none}
+    .image-state{font-size:10px;color:#7d8490}
+
+    .field{margin:15px 0}
+    label{display:block;font-weight:700;margin-bottom:7px}
+    input[type=text],input[type=number],textarea{width:100%;border:1px solid #dce0e6;border-radius:10px;padding:11px 13px;outline:none;background:#fff;color:var(--ink)}
+    input:focus,textarea:focus{border-color:#ff9a7f;box-shadow:0 0 0 3px #ee4d2d12}
+    .setting-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:17px 0}
+    .setting-row label{margin:0}
+    .counter{display:flex;align-items:center;border:1px solid #dce0e6;border-radius:10px;overflow:hidden}
+    .counter button{width:38px;height:38px;border:0;background:#f8f9fb;font-size:20px;color:#4a5360}
+    .counter input{width:48px;text-align:center;border:0;border-radius:0;padding:8px 0;font-weight:750}
+    .switch{position:relative;width:48px;height:27px;display:inline-block;flex:none}
+    .switch input{opacity:0;width:0;height:0}
+    .slider{position:absolute;inset:0;background:#cbd0d8;border-radius:30px;transition:.2s}
+    .slider:before{content:"";position:absolute;width:19px;height:19px;left:4px;top:4px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px #0002}
+    .switch input:checked+.slider{background:var(--orange)}
+    .switch input:checked+.slider:before{transform:translateX(21px)}
+    .generate-wrap{margin:24px -24px -24px;padding:18px 20px;border-top:1px solid #f0f1f3}
+    .generate-wrap .btn{font-size:17px;padding:15px}
+    .right{display:flex;flex-direction:column;gap:16px;min-width:0}
+    .preview-panel{padding:0;overflow:hidden}
+    .panel-head{padding:17px 22px;border-bottom:1px solid #eef0f3;display:flex;align-items:center;justify-content:space-between;font-size:18px;font-weight:800}
+    .panel-head .eye{color:var(--orange);margin-right:9px}
+    .count-label{font-size:14px;color:#727986;font-weight:600}
+    .preview-body{padding:22px 22px 25px}
+    .preview-heading{font-size:14px;letter-spacing:.4px;color:#8d929b;font-weight:750;margin:0 0 2px}
+    .product-list{display:flex;flex-direction:column;gap:10px}
+    .product-card{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;margin:0;background:#fff;border:1px solid #ececec;border-radius:16px;box-shadow:0 2px 7px rgba(0,0,0,.055);overflow:hidden}
+    .product-card td:first-child{width:116px;padding:12px 0 12px 12px;vertical-align:top}
+    .product-card td:last-child{padding:13px 15px;vertical-align:middle}
+    .product-photo-link{display:block;text-decoration:none}
+    .product-photo{width:100%;height:108px;display:flex;align-items:center;justify-content:center;position:relative}
+    .product-photo img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+    .photo-caption{position:absolute;left:0;bottom:-2px;color:#9aa0a6;font-size:10px}
+    .product-name{display:block;font-weight:800;font-size:15px;color:#1a1a1a;text-decoration:none;line-height:1.35;margin-bottom:4px}
+    .product-price{color:#ee4d2d;font-weight:800;font-size:15px;margin:2px 0 8px}
+    .product-price span{color:#9aa0a6;font-weight:400;font-size:12px}
+    .shop-link{display:inline-block;background:#ee4d2d;color:#fff;text-decoration:none;padding:8px 15px;border-radius:8px;font-size:13px;font-weight:750}
+    .empty-preview{border:1px dashed #dce0e6;border-radius:14px;padding:36px 20px;text-align:center;color:#8a919c}
+    .empty-preview .big{font-size:32px;margin-bottom:8px}
+    .code-panel{padding:0;overflow:hidden}
+    .code-head{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid #eef0f3;gap:10px}
+    .tabs{display:flex;gap:20px;align-items:center}
+    .tab{border:0;background:transparent;padding:8px 2px;color:#7b828d;font-weight:800}
+    .tab.active{color:var(--orange);border-bottom:2px solid var(--orange)}
+    .code-wrap{padding:0 18px 16px}
+    pre{margin:0;background:#171d27;color:#d8e0ec;border-radius:12px;padding:18px;overflow:auto;max-height:260px;font:12px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre}
+    .code-actions{display:flex;gap:12px;padding:0 18px 17px}
+    .code-actions .btn{flex:1}
+    .notice{font-size:12px;color:#858c97;margin:12px 0 0}
+    .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:#202733;color:#fff;padding:11px 17px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s;z-index:5;box-shadow:0 8px 24px #0002}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .hidden{display:none!important}
+    @media(max-width:980px){.layout{grid-template-columns:1fr}.topbar{align-items:flex-start}.right{order:2}}
+    @media(max-width:600px){.app{padding:17px 12px 28px}.topbar{display:block}.top-pill{display:inline-block;margin-top:14px}.left{padding:17px}.generate-wrap{margin:22px -17px -17px}.preview-body{padding:15px 12px}.panel-head{padding:14px 15px}.product-card td:first-child{width:90px;padding:9px 0 9px 9px}.product-photo{height:90px}.product-card td:last-child{padding:10px}.product-name{font-size:13px}.product-price{font-size:14px}.shop-link{font-size:11px;padding:7px 10px}.code-actions{flex-direction:column}.code-head{flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">S</div>
+      <div>
+        <h1><span>Shopee</span> Affiliate HTML Generator</h1>
+        <p class="subtitle">Buat kode HTML rekomendasi produk Shopee dari file JSON atau CSV dengan mudah.</p>
+      </div>
+    </div>
+    <div class="top-pill">⚡ Generator Produk Affiliate</div>
+  </header>
+
+  <main class="layout">
+    <section class="panel left">
+      <h2 class="section-title"><span class="number">1</span> Upload Data Produk (JSON / CSV)</h2>
+      <div class="dropzone" id="dropzone">
+        <div class="json-icon">▤</div>
+        <strong>Pilih atau seret file JSON / CSV ke sini</strong>
+        <p>Format: .json atau .csv (nama produk, harga, link Shopee; gambar opsional)</p>
+        <input id="jsonFile" type="file" accept=".json,.csv,application/json,text/csv" hidden>
+        <button class="btn btn-soft" id="chooseFile" type="button">▱ &nbsp; Pilih File JSON / CSV</button>
+      </div>
+      <div class="file-status hidden" id="fileStatus">
+        <span class="check">●</span><div><strong id="fileName">produk.json</strong><small id="fileCount"> · 0 produk</small></div>
+        <button id="removeFile" title="Hapus file" type="button">×</button>
+      </div>
+      <div class="image-manager hidden" id="imageManager">
+        <div class="image-manager-head">Foto Produk</div>
+        <div class="image-manager-help">Gambar dari kolom CSV/JSON akan terisi otomatis. Jika kosong, klik Ambil dari Shopee untuk mencoba membaca URL gambar dari halaman produk. Jika diblokir, tempel URL gambar hasil Inspect Element atau unggah foto.</div>
+        <div id="imageEditorList"></div>
+      </div>
+
+      <div class="divider"></div>
+      <h2 class="section-title"><span class="number">2</span> Pengaturan Tampilan</h2>
+      <div class="field">
+        <label for="sectionTitle">Judul Section</label>
+        <input type="text" id="sectionTitle" value="REKOMENDASI" placeholder="Contoh: REKOMENDASI">
+      </div>
+      <div class="setting-row">
+        <label>Jumlah produk ditampilkan</label>
+        <div class="counter">
+          <button type="button" id="minus">−</button>
+          <input type="number" id="productLimit" min="1" max="999" value="2">
+          <button type="button" id="plus">+</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <label for="showBorder">Tampilkan border &amp; shadow</label>
+        <label class="switch"><input id="showBorder" type="checkbox" checked><span class="slider"></span></label>
+      </div>
+      <div class="setting-row">
+        <label for="newTab">Buka link di tab baru</label>
+        <label class="switch"><input id="newTab" type="checkbox" checked><span class="slider"></span></label>
+      </div>
+      <div class="field">
+        <label for="captionText">Caption kecil di bawah gambar</label>
+        <input type="text" id="captionText" value="-" placeholder="-">
+      </div>
+      <div class="generate-wrap">
+        <button class="btn btn-primary btn-block" id="generate">✦ &nbsp; Generate HTML</button>
+      </div>
+    </section>
+
+    <section class="right">
+      <div class="panel preview-panel">
+        <div class="panel-head"><div><span class="eye">◉</span> Preview Hasil</div><span class="count-label" id="previewCount">0 produk</span></div>
+        <div class="preview-body">
+          <div class="preview-heading" id="previewHeading">REKOMENDASI</div>
+          <div class="product-list" id="previewList">
+            <div class="empty-preview"><div class="big">▤</div><strong>Belum ada produk</strong><br>Upload file JSON untuk melihat preview produk.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel code-panel">
+        <div class="code-head">
+          <div class="tabs">
+            <button class="tab active" id="htmlTab" type="button">‹/› Kode HTML</button>
+            <button class="tab" id="jsonTab" type="button">{ } Data JSON</button>
+          </div>
+          <button class="btn btn-outline" id="copy" type="button">▢ &nbsp; Salin</button>
+        </div>
+        <div class="code-wrap"><pre id="codeOutput"><span style="color:#929baa">Kode HTML akan muncul di sini setelah kamu mengunggah JSON dan menekan Generate HTML.</span></pre></div>
+        <div class="code-actions">
+          <button class="btn btn-outline" id="download" type="button">⇩ &nbsp; Download HTML</button>
+          <button class="btn btn-outline" id="clear" type="button">▤ &nbsp; Bersihkan</button>
+        </div>
+      </div>
+      <p class="notice">Mendukung JSON ekspor Shopee: Nama Produk, Harga, Link Komisi Ekstra, dan Link Produk. Gambar opsional; jika tidak tersedia, area gambar akan menampilkan placeholder. Data diproses langsung di browser.</p>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  let products = [];
+  let generatedHTML = '';
+  let activeTab = 'html';
+
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[ch]));
+  const safeUrl = value => {
+    const s = String(value ?? '').trim();
+    if (!s) return '';
+    try {
+      const u = new URL(s, window.location.href);
+      return ['http:','https:'].includes(u.protocol) ? u.href : '';
+    } catch { return ''; }
+  };
+  const safeImageUrl = value => {
+    const s = String(value ?? '').trim();
+    if (/^data:image\/(png|jpeg|jpg|gif|webp|svg\+xml);base64,/i.test(s)) return s;
+    return safeUrl(s);
+  };
+  const getField = (obj, aliases) => {
+    const keys = Object.keys(obj || {});
+    for (const alias of aliases) {
+      if (obj[alias] !== undefined && obj[alias] !== null && String(obj[alias]).trim() !== '') return obj[alias];
+      const found = keys.find(k => k.trim().toLowerCase() === alias.toLowerCase());
+      if (found && obj[found] !== undefined && obj[found] !== null && String(obj[found]).trim() !== '') return obj[found];
+    }
+    return '';
+  };
+
+  const normalize = raw => {
+    const list = Array.isArray(raw) ? raw : (Array.isArray(raw.products) ? raw.products : null);
+    if (!list) throw new Error('Format JSON harus berupa array produk atau objek dengan properti "products".');
+    return list.map((p, i) => {
+      if (!p || typeof p !== 'object' || Array.isArray(p)) throw new Error(`Data produk ke-${i+1} tidak valid.`);
+      const name = getField(p, ['name','nama','title','judul','Nama Produk']);
+      const price = getField(p, ['price','harga','Harga']);
+      const image = getField(p, ['image','gambar','image_url','foto','Gambar Produk','URL Gambar','Link Gambar','Image URL']);
+      // Link Komisi Ekstra diprioritaskan karena biasanya merupakan tautan affiliate.
+      const link = getField(p, ['link','url','affiliate_link','shopee_link','Link Komisi Ekstra','Link Produk']);
+      if (!String(name).trim()) throw new Error(`Nama produk ke-${i+1} belum diisi.`);
+      if (!String(link).trim()) throw new Error(`Link Shopee produk ke-${i+1} belum diisi.`);
+      return {name:String(name).trim(),price:String(price).trim(),image:String(image).trim(),link:String(link).trim()};
+    });
+  };
+
+  // CSV parser: menangani koma dalam tanda kutip, escaped quote, dan baris baru.
+  const parseCSV = text => {
+    const clean = text.replace(/^\uFEFF/, '').trim();
+    if (!clean) throw new Error('File CSV kosong.');
+    const firstLine = clean.split(/\r?\n/, 1)[0];
+    const delimiters = [',',';','\t'];
+    const delimiter = delimiters.sort((a,b) => firstLine.split(b).length - firstLine.split(a).length)[0];
+    const rows = [];
+    let row = [], cell = '', quoted = false;
+    for (let i=0; i<clean.length; i++) {
+      const ch = clean[i];
+      if (ch === '"') {
+        if (quoted && clean[i+1] === '"') { cell += '"'; i++; }
+        else quoted = !quoted;
+      } else if (ch === delimiter && !quoted) {
+        row.push(cell); cell = '';
+      } else if ((ch === '\n' || ch === '\r') && !quoted) {
+        if (ch === '\r' && clean[i+1] === '\n') i++;
+        row.push(cell); cell = '';
+        if (row.some(v => v.trim() !== '')) rows.push(row);
+        row = [];
+      } else {
+        cell += ch;
+      }
+    }
+    if (quoted) throw new Error('Format CSV tidak valid: ada tanda kutip yang belum ditutup.');
+    row.push(cell);
+    if (row.some(v => v.trim() !== '')) rows.push(row);
+    if (rows.length < 2) throw new Error('CSV harus memiliki baris header dan minimal satu baris produk.');
+    const headers = rows.shift().map(h => h.trim().replace(/^\uFEFF/, ''));
+    return rows.map(values => {
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = (values[i] ?? '').trim(); });
+      return obj;
+    });
+  };
+
+  function attrs() {
+    return {
+      target: $('newTab').checked ? ' target="_blank"' : '',
+      border: $('showBorder').checked
+        ? 'border: 1px solid #ececec; box-shadow: 0 1px 4px rgba(0,0,0,.06);'
+        : 'border: 1px solid transparent; box-shadow: none;',
+      caption: $('captionText').value || '-'
+    };
+  }
+
+  function productHTML(p, a) {
+    const link = safeUrl(p.link);
+    const image = safeImageUrl(p.image);
+    const rel = ' rel="nofollow sponsored noopener noreferrer"';
+    const target = a.target;
+    return `<table style="width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; margin: 12px 0; background: #fff; ${a.border} border-radius: 14px; overflow: hidden;" cellspacing="0" cellpadding="0">
+  <tbody>
+    <tr>
+      <td style="width: 96px; padding: 12px 0 12px 12px; vertical-align: top;" valign="top" width="96">
+        <a style="display: block;" href="${esc(link)}"${target}${rel}>
+          <div class="photo__img" style="position: relative; width: 100%; min-height: 96px; display: flex; align-items: center; justify-content: center;">
+            ${image ? `<img src="${esc(image)}" alt="${esc(p.name)}" style="max-width: 100%; max-height: 110px; width: auto; height: auto; object-fit: contain;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span style="display:none;color:#9aa0a6;font-size:10px;text-align:center;align-items:center;justify-content:center;min-height:80px;">Foto tidak tersedia</span>` : '<span style="color:#9aa0a6;font-size:10px;text-align:center;">Foto belum ditambahkan</span>'}
+            <div class="photo__caption" style="position:absolute;left:0;bottom:-2px;color:#9aa0a6;font-size:10px;">${esc(a.caption)}</div>
+          </div>
+        </a>
+      </td>
+      <td style="padding: 12px 14px; vertical-align: middle;">
+        <a style="display: block; font-weight: bold; font-size: 15px; color: #1a1a1a; text-decoration: none; line-height: 1.35;" href="${esc(link)}"${target}${rel}>${esc(p.name)}</a>
+        <div style="color: #ee4d2d; font-weight: bold; font-size: 15px; margin: 2px 0 6px;">${esc(p.price)} <span style="color: #9aa0a6; font-weight: 400; font-size: 12px;">· di Shopee</span></div>
+        <a style="display: inline-block; background: #ee4d2d; color: #fff; text-decoration: none; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: bold;" href="${esc(link)}"${target}${rel}>Cek harga di Shopee →</a>
+      </td>
+    </tr>
+  </tbody>
+</table>`;
+  }
+
+  function fullHTML(list) {
+    const a = attrs();
+    const heading = $('sectionTitle').value.trim() || 'REKOMENDASI';
+    return `<div class="shopee-recommendations">
+  <div style="font-size: 10px; letter-spacing: .5px; color: #858585; margin: 0 0 12px;">${esc(heading)}</div>
+${list.map(p => productHTML(p,a)).join('\n')}
+</div>`;
+  }
+
+  function renderImageEditor() {
+    const wrap = $('imageManager');
+    const list = $('imageEditorList');
+    if (!products.length) {
+      wrap.classList.add('hidden');
+      list.innerHTML = '';
+      return;
+    }
+    wrap.classList.remove('hidden');
+    list.innerHTML = products.map((p, i) => `
+      <div class="image-item" data-image-index="${i}">
+        <div class="image-thumb">${p.image ? `<img src="${esc(p.image)}" alt="">` : 'No image'}</div>
+        <div class="image-fields">
+          <strong>${i+1}. ${esc(p.name)}</strong>
+          <input type="url" data-image-url="${i}" value="${esc(p.image)}" placeholder="Tempel URL gambar produk (https://...)">
+          <div class="image-tools">
+            <label class="btn btn-soft" for="local-image-${i}">Unggah foto</label>
+            <input id="local-image-${i}" type="file" data-local-image="${i}" accept="image/*">
+            <button class="btn btn-soft" type="button" data-fetch-image="${i}">Ambil dari Shopee</button>
+            <button class="btn btn-outline" type="button" data-clear-image="${i}">Hapus foto</button>
+            <span class="image-state">${p.image ? 'Gambar tersedia' : 'Belum ada gambar'}</span>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  function updateProductImage(index, value) {
+    if (!products[index]) return;
+    products[index].image = value;
+    const item = $('imageEditorList').querySelector(`[data-image-index="${index}"]`);
+    if (item) {
+      const thumb = item.querySelector('.image-thumb');
+      thumb.innerHTML = value ? `<img src="${esc(value)}" alt="">` : 'No image';
+      const state = item.querySelector('.image-state');
+      state.textContent = value ? 'Gambar tersedia' : 'Belum ada gambar';
+    }
+    refresh();
+  }
+
+  function renderPreview(list) {
+    const a = attrs();
+    $('previewHeading').textContent = $('sectionTitle').value.trim() || 'REKOMENDASI';
+    $('previewCount').textContent = `${list.length} produk`;
+    if (!list.length) {
+      $('previewList').innerHTML = '<div class="empty-preview"><div class="big">▤</div><strong>Belum ada produk</strong><br>Upload file JSON untuk melihat preview produk.</div>';
+      return;
+    }
+    // Render the same generated markup used for export.
+    $('previewList').innerHTML = list.map(p => productHTML(p,a)).join('');
+    $('previewList').querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', e => e.preventDefault());
+    });
+  }
+
+  function refresh() {
+    const limit = Math.max(1, parseInt($('productLimit').value,10) || 1);
+    const shown = products.slice(0,limit);
+    renderPreview(shown);
+    if (activeTab === 'html' && generatedHTML) {
+      generatedHTML = fullHTML(shown);
+      $('codeOutput').textContent = generatedHTML;
+    }
+  }
+
+  function generate() {
+    if (!products.length) { toast('Upload file JSON terlebih dahulu.'); return; }
+    const limit = Math.max(1, parseInt($('productLimit').value,10) || 1);
+    const shown = products.slice(0,limit);
+    generatedHTML = fullHTML(shown);
+    renderPreview(shown);
+    activeTab = 'html';
+    $('htmlTab').classList.add('active'); $('jsonTab').classList.remove('active');
+    $('codeOutput').textContent = generatedHTML;
+    toast(`Berhasil membuat HTML untuk ${shown.length} produk.`);
+  }
+
+  function showTab(tab) {
+    activeTab = tab;
+    $('htmlTab').classList.toggle('active',tab==='html');
+    $('jsonTab').classList.toggle('active',tab==='json');
+    if (tab==='html') {
+      $('codeOutput').textContent = generatedHTML || 'Kode HTML akan muncul di sini setelah kamu menekan Generate HTML.';
+    } else {
+      $('codeOutput').textContent = JSON.stringify(products,null,2) || '[]';
+    }
+  }
+
+  function toast(message) {
+    $('toast').textContent = message;
+    $('toast').classList.add('show');
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(()=>$('toast').classList.remove('show'),2400);
+  }
+
+  async function readFile(file) {
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const extension = (file.name.split('.').pop() || '').toLowerCase();
+      let parsed;
+      if (extension === 'csv' || file.type === 'text/csv') {
+        parsed = parseCSV(text);
+      } else if (extension === 'json' || file.type === 'application/json' || text.trim().startsWith('[') || text.trim().startsWith('{')) {
+        parsed = JSON.parse(text.replace(/^\uFEFF/, ''));
+      } else {
+        throw new Error('Format file tidak didukung. Silakan upload file .json atau .csv.');
+      }
+      products = normalize(parsed);
+      $('fileName').textContent = file.name;
+      $('fileCount').textContent = ` · ${products.length} produk`;
+      $('fileStatus').classList.remove('hidden');
+      renderImageEditor();
+      $('productLimit').value = Math.min(2, Math.max(1,products.length));
+      generatedHTML = '';
+      showTab('json');
+      renderPreview(products.slice(0,parseInt($('productLimit').value,10)));
+      toast(`Berhasil membaca ${products.length} produk dari ${extension.toUpperCase()}.`);
+    } catch (err) {
+      toast(err.message || 'File tidak dapat dibaca.');
+    }
+  }
+
+  $('imageEditorList').addEventListener('change', async e => {
+    const urlInput = e.target.closest('[data-image-url]');
+    if (urlInput) {
+      const index = Number(urlInput.dataset.imageUrl);
+      updateProductImage(index, urlInput.value.trim());
+      return;
+    }
+    const fileInput = e.target.closest('[data-local-image]');
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+      const file = fileInput.files[0];
+      if (!file.type.startsWith('image/')) { toast('Pilih file gambar yang valid.'); return; }
+      if (file.size > 5 * 1024 * 1024) { toast('Ukuran gambar maksimal 5 MB.'); fileInput.value=''; return; }
+      const dataUrl = await new Promise((resolve,reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      updateProductImage(Number(fileInput.dataset.localImage), dataUrl);
+      toast('Foto produk berhasil ditambahkan.');
+    }
+  });
+  $('imageEditorList').addEventListener('click', async e => {
+    const fetchButton = e.target.closest('[data-fetch-image]');
+    if (fetchButton) {
+      const index = Number(fetchButton.dataset.fetchImage);
+      const product = products[index];
+      if (!product || !product.link) { toast('Link produk Shopee tidak ditemukan.'); return; }
+      fetchButton.disabled = true;
+      fetchButton.textContent = 'Memeriksa...';
+      try {
+        const response = await fetch(`/api/shopee-image?url=${encodeURIComponent(product.link)}`);
+        const result = await response.json();
+        if (!response.ok || !result.image) {
+          throw new Error(result.error || 'Gambar tidak ditemukan dari halaman Shopee.');
+        }
+        updateProductImage(index, result.image);
+        const item = $('imageEditorList').querySelector(`[data-image-index="${index}"]`);
+        const input = item && item.querySelector('[data-image-url]');
+        if (input) input.value = result.image;
+        toast('URL gambar berhasil diambil dari halaman Shopee.');
+      } catch (err) {
+        toast(err.message || 'Gagal mengambil gambar. Coba tempel URL gambar dari Inspect Element.');
+      } finally {
+        fetchButton.disabled = false;
+        fetchButton.textContent = 'Ambil dari Shopee';
+      }
+      return;
+    }
+    const clearButton = e.target.closest('[data-clear-image]');
+    if (clearButton) {
+      const index = Number(clearButton.dataset.clearImage);
+      updateProductImage(index, '');
+      const item = $('imageEditorList').querySelector(`[data-image-index="${index}"]`);
+      const input = item && item.querySelector('[data-image-url]');
+      if (input) input.value = '';
+      toast('Foto produk dihapus.');
+    }
+  });
+
+  $('chooseFile').addEventListener('click',()=>$('jsonFile').click());
+  $('jsonFile').addEventListener('change',e=>readFile(e.target.files[0]));
+  $('removeFile').addEventListener('click',()=>{
+    products=[];generatedHTML='';$('jsonFile').value='';$('fileStatus').classList.add('hidden');renderImageEditor();
+    showTab('html');renderPreview([]);toast('File dan data produk dihapus.');
+  });
+  const dz=$('dropzone');
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag')});
+  dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+  dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');readFile(e.dataTransfer.files[0])});
+  $('generate').addEventListener('click',generate);
+  $('htmlTab').addEventListener('click',()=>showTab('html'));
+  $('jsonTab').addEventListener('click',()=>showTab('json'));
+  $('copy').addEventListener('click',async()=>{
+    const text=$('codeOutput').textContent;
+    if (!text || text.startsWith('Kode HTML akan')) {toast('Belum ada kode untuk disalin.');return;}
+    try { await navigator.clipboard.writeText(text);toast('Kode berhasil disalin.'); }
+    catch { const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('Kode berhasil disalin.'); }
+  });
+  $('download').addEventListener('click',()=>{
+    if (!generatedHTML) {toast('Tekan Generate HTML terlebih dahulu.');return;}
+    const doc='<!doctype html>\n<html lang="id">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Rekomendasi Produk</title>\n</head>\n<body>\n'+generatedHTML+'\n</body>\n</html>';
+    const blob=new Blob([doc],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='rekomendasi-produk-shopee.html';a.click();URL.revokeObjectURL(url);
+    toast('File HTML berhasil diunduh.');
+  });
+  $('clear').addEventListener('click',()=>{
+    products=[];generatedHTML='';$('jsonFile').value='';$('fileStatus').classList.add('hidden');renderImageEditor();
+    $('sectionTitle').value='REKOMENDASI';$('productLimit').value=2;$('showBorder').checked=true;$('newTab').checked=true;$('captionText').value='-';
+    showTab('html');renderPreview([]);toast('Generator berhasil dibersihkan.');
+  });
+  $('minus').addEventListener('click',()=>{$('productLimit').value=Math.max(1,(parseInt($('productLimit').value,10)||1)-1);refresh()});
+  $('plus').addEventListener('click',()=>{$('productLimit').value=Math.min(999,(parseInt($('productLimit').value,10)||1)+1);refresh()});
+  ['sectionTitle','productLimit','showBorder','newTab','captionText'].forEach(id=>{
+    $(id).addEventListener('input',()=>{if(products.length)refresh();else $('previewHeading').textContent=$('sectionTitle').value||'REKOMENDASI';});
+    $(id).addEventListener('change',()=>{if(products.length)refresh();});
+  });
+})();
+</script>
+</body>
+</html>
